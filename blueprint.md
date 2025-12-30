@@ -30,10 +30,13 @@ NetStat Live is a modern, responsive dashboard application for managing sports-r
 *   **Section Cards:** Displays key metrics and information.
 *   **Interactive Charts:** Provides interactive data visualizations.
 *   **Data Table:** A table for displaying and managing data.
+*   **Card Layout:** An alternative card-based layout for a more visual representation of data.
+*   **Filtering:** Allows users to filter data by type and favorite status.
+*   **Drag-and-Drop:** Enables users to reorder items in the data table.
 
-## Current Plan: Refactor Competitions Feature
+## Current Plan: Refactor Competitions Feature & Enhance UX
 
-*   **Objective:** To move the "competitions" feature from the "dashboard" route to its own top-level route.
+*   **Objective:** To move the "competitions" feature to its own top-level route and improve the user experience with new features.
 *   **Steps Taken:**
     1.  Moved the competitions pages from `src/app/dashboard/competitions` to `src/app/competitions`.
     2.  Created new `page.tsx`, `new/page.tsx`, and `[id]/edit/page.tsx` files under `src/app/competitions`.
@@ -41,3 +44,7 @@ NetStat Live is a modern, responsive dashboard application for managing sports-r
     4.  Updated the sidebar navigation to link to `/competitions`.
     5.  Deleted the old `src/app/dashboard/competitions` directory and its contents.
     6.  Updated `CompetitionContext.tsx` to ensure proper functionality with the new route.
+    7.  Added a card layout option for a more visual representation of competitions.
+    8.  Implemented filtering by competition type and favorite status.
+    9.  Added drag-and-drop functionality to reorder competitions in the data table.
+    10.  Fixed all linting errors to ensure a clean and maintainable codebase.

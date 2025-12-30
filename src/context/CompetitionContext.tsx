@@ -14,6 +14,7 @@ export interface Competition {
 
 interface CompetitionContextType {
   competitions: Competition[];
+  setCompetitions: React.Dispatch<React.SetStateAction<Competition[]>>;
   addCompetition: (competition: Omit<Competition, 'id' | 'games'>) => void;
   deleteCompetition: (id: string) => void;
   updateCompetition: (id: string, updatedCompetition: Partial<Competition>) => void;
@@ -26,24 +27,25 @@ const CompetitionContext = createContext<CompetitionContextType | undefined>(und
 // 3. CREATE THE PROVIDER COMPONENT
 
 export const CompetitionProvider = ({ children }: { children: ReactNode }) => {
-    // Initialize with an empty array on both server and client
     const [competitions, setCompetitions] = useState<Competition[]>([]);
 
-    // On the client, after initial render, load from localStorage
     useEffect(() => {
         try {
             const savedCompetitions = localStorage.getItem('competitions');
             if (savedCompetitions) {
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setCompetitions(JSON.parse(savedCompetitions));
             }
         } catch (error) {
             console.error("Failed to parse competitions from localStorage", error);
         }
-    }, []); // Empty dependency array ensures this runs only once on mount
+    }, []);
 
-    // Save to localStorage whenever competitions change
     useEffect(() => {
-        localStorage.setItem('competitions', JSON.stringify(competitions));
+        // Prevents saving the initial empty array to localStorage on first render.
+        if (competitions.length > 0) {
+            localStorage.setItem('competitions', JSON.stringify(competitions));
+        }
     }, [competitions]);
 
   const addCompetition = (competition: Omit<Competition, 'id' | 'games'>) => {
@@ -68,7 +70,7 @@ export const CompetitionProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <CompetitionContext.Provider value={{ competitions, addCompetition, deleteCompetition, updateCompetition }}>
+    <CompetitionContext.Provider value={{ competitions, setCompetitions, addCompetition, deleteCompetition, updateCompetition }}>
       {children}
     </CompetitionContext.Provider>
   );

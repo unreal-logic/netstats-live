@@ -1,6 +1,7 @@
 "use client"
 
-import { IconPlayerPlay, IconMail, type Icon } from "@tabler/icons-react"
+import { IconMail, type Icon } from "@tabler/icons-react"
+import { PlusCircle } from "lucide-react"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
@@ -30,7 +31,7 @@ export function NavMain({
               tooltip="New Game"
               className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
             >
-              <IconPlayerPlay />
+              <PlusCircle />
               <span>New Game</span>
             </SidebarMenuButton>
             <Button
