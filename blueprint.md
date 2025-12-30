@@ -1,61 +1,45 @@
-# NetStat Live - Blueprint
+# NetStat Live Dashboard Blueprint
 
 ## Overview
 
-NetStat Live is a web application designed to provide a real-time dashboard for monitoring network and server statistics. It features a clean, modern interface with data visualizations, making it easy to track key performance indicators.
+NetStat Live is a modern, responsive dashboard application for managing sports-related data. It features a clean and intuitive user interface with a collapsible sidebar for easy navigation.
 
-## Development Workflow
+## Features & Design
 
-To ensure consistency, quality, and adherence to best practices, all development in this project must follow a structured, agent-based workflow. This process leverages specialized AI agents and available MCP servers to handle distinct phases of development, from requirements analysis to implementation and final review.
+### Layout
 
-1.  **Analyze Requirements**: For any new feature or change, the first step is to use the **`shadcn-requirements-analyzer`** agent. This agent will break down the request into a structured list of required `shadcn/ui` components and generate a `requirements.md` file.
+*   **Modern Dashboard Design:** A visually balanced layout with clean spacing and polished styles.
+*   **Responsive:** Adapts to different screen sizes, working on both mobile and web.
+*   **Collapsible Sidebar:** Provides easy navigation without cluttering the main content area.
 
-2.  **Research Components**: Once requirements are defined, the **`shadcn-component-researcher`** agent is used. It gathers detailed information, usage examples, and installation commands for each required component, creating a `component-research.md` file.
+### Sidebar
 
-3.  **Implement with Builder**: With the research complete, the **`shadcn-implementation-builder`** agent generates the production-ready code. This ensures proper TypeScript, state management, validation, and adherence to `shadcn/ui` best practices.
+*   **Header:** Displays the application name, "NetStat Live", with a volleyball logo in the primary app color to the left.
+*   **New Game Button:** A primary button with a circle play icon to start a new game.
+*   **Navigation:** The main navigation includes the following items:
+    *   **Dashboard:** The main landing page.
+    *   **Analytics:** For viewing data visualizations.
+    *   **Competitions:** For managing competitions.
+    *   **Teams:** For managing teams.
+    *   **Venues:** For managing venues with a map pin icon.
+    *   **Settings:** For user and application settings.
+*   **User Profile:** A user profile section is located in the sidebar footer.
 
-4.  **Styling and Theming**: All styling changes, theme modifications, color palette generation, and CSS conversions will be handled programmatically using the `tailwindcss-mcp-server` tools. Direct modification of CSS files should be avoided.
+### Main Content
 
-5.  **Refactor and Review**: After the initial implementation, the **`code-refactorer`** and **`code-reviewer`** agents are employed. They ensure high code quality, improve maintainability, and check for any potential issues before the code is finalized.
+*   **Section Cards:** Displays key metrics and information.
+*   **Interactive Charts:** Provides interactive data visualizations.
+*   **Data Table:** A table for displaying and managing data.
 
-6.  **Commit Changes**: Finally, the **`git-commit-helper`** agent is used to create clean, conventional commit messages for all changes.
+## Current Plan: Initial Setup & Sidebar Navigation
 
-This process ensures that all development is systematic, leverages the best of our tooling, and results in a high-quality, maintainable codebase.
-
-## Implemented Features & Design
-
-### Dashboard Implementation
-
-- **Primary Implementation**: The core of the dashboard was built using the `@shadcn/dashboard-01` block. This provided a comprehensive starting point with a pre-built layout and all the necessary components.
-- **Technology Stack**: Next.js with TypeScript and Tailwind CSS.
-- **Structure**:
-    - The main dashboard page is located at `app/dashboard/page.tsx`.
-    - The layout is managed by `app/dashboard/layout.tsx`, which includes the `SidebarProvider`.
-- **UI Components**:
-    - **Navigation**: The `app-sidebar.tsx` component was updated to provide a clean and relevant navigation structure with links to "Dashboard", "Analytics", and "Settings".
-    - **Header**: A `site-header.tsx` component includes a search bar and user menu.
-    - **Data Display**:
-        - `section-cards.tsx` displays key metrics.
-        - `chart-area-interactive.tsx` provides a chart for data visualization.
-        - `data-table.tsx` displays tabular data with pagination and sorting.
-- **Styling & Design**:
-    - **Theme**: The application has been reverted to the default Tailwind CSS theme. Future theme modifications will be handled using the `tailwindcss-mcp-server`.
-    - **Icons**: `lucide-react` is used for all iconography.
-    - **Component Library**: All necessary `shadcn/ui` components were automatically installed and configured by the `dashboard-01` block.
-
-## Current Plan
-
-### Revert to Default Theme
-
-The immediate goal is to revert the application to its default "out of the box" theme and establish a new workflow for theme and style management.
-
-### Steps Taken
-
-1.  **Reverted `globals.css`**: The `src/app/globals.css` file was reverted to the default Tailwind CSS styles.
-2.  **Updated `GEMINI.md`**: The `GEMINI.md` file has been updated to include instructions to use the `tailwindcss-mcp-server` for all styling and theming tasks.
-3.  **Updated `blueprint.md`**: This `blueprint.md` file has been updated to reflect the new workflow and the current state of the application.
-
-### Next Steps
-
-1.  **Verify Theme**: Ensure the default theme is applied correctly across the application.
-2.  **Await User Instruction**: Await further instructions from the user for new features or design changes, which will be implemented using the new `tailwindcss-mcp-server` workflow.
+*   **Objective:** To set up the initial sidebar navigation and controls for the NetStat Live dashboard.
+*   **Steps Taken:**
+    1.  Added a "Competitions" item to the sidebar navigation.
+    2.  Added a "Manage Teams" item to the sidebar navigation.
+    3.  Added a "Manage Venues" item to the sidebar navigation.
+    4.  Renamed "Manage Teams" to "Teams" for a cleaner look.
+    5.  Renamed "Manage Venues" to "Venues" for a cleaner look.
+    6.  Changed the "Venues" icon to a map pin.
+    7.  Changed the "New Game" icon to a circle play icon.
+    8.  Added a volleyball logo to the left of the app name.
