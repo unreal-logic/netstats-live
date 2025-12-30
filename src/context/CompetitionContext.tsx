@@ -25,23 +25,26 @@ const CompetitionContext = createContext<CompetitionContextType | undefined>(und
 
 // 3. CREATE THE PROVIDER COMPONENT
 
-const initialCompetitions = (): Competition[] => {
-    try {
-      const savedCompetitions = localStorage.getItem('competitions');
-      return savedCompetitions ? JSON.parse(savedCompetitions) : [];
-    } catch (error) {
-      console.error("Failed to parse competitions from localStorage", error);
-      return [];
-    }
-};
-
 export const CompetitionProvider = ({ children }: { children: ReactNode }) => {
-  const [competitions, setCompetitions] = useState<Competition[]>(initialCompetitions);
+    // Initialize with an empty array on both server and client
+    const [competitions, setCompetitions] = useState<Competition[]>([]);
 
-  // Save competitions to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('competitions', JSON.stringify(competitions));
-  }, [competitions]);
+    // On the client, after initial render, load from localStorage
+    useEffect(() => {
+        try {
+            const savedCompetitions = localStorage.getItem('competitions');
+            if (savedCompetitions) {
+                setCompetitions(JSON.parse(savedCompetitions));
+            }
+        } catch (error) {
+            console.error("Failed to parse competitions from localStorage", error);
+        }
+    }, []); // Empty dependency array ensures this runs only once on mount
+
+    // Save to localStorage whenever competitions change
+    useEffect(() => {
+        localStorage.setItem('competitions', JSON.stringify(competitions));
+    }, [competitions]);
 
   const addCompetition = (competition: Omit<Competition, 'id' | 'games'>) => {
     const newCompetition: Competition = {
@@ -57,8 +60,8 @@ export const CompetitionProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateCompetition = (id: string, updatedCompetition: Partial<Competition>) => {
-    setCompetitions(prev => 
-      prev.map(comp => 
+    setCompetitions(prev =>
+      prev.map(comp =>
         comp.id === id ? { ...comp, ...updatedCompetition } : comp
       )
     );

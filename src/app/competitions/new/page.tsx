@@ -39,7 +39,7 @@ export default function NewCompetitionPage() {
       return;
     }
     addCompetition({ name, type, isFavorite });
-    router.push('/dashboard/competitions');
+    router.push('/competitions');
   };
 
   return (
@@ -83,7 +83,7 @@ export default function NewCompetitionPage() {
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
         <Button variant="outline" asChild>
-          <Link href="/dashboard/competitions">Cancel</Link>
+          <Link href="/competitions">Cancel</Link>
         </Button>
         <Button onClick={handleSubmit}>Create</Button>
       </CardFooter>

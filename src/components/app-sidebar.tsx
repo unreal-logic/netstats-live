@@ -42,7 +42,7 @@ const data = {
     },
     {
       title: "Competitions",
-      url: "#",
+      url: "/competitions",
       icon: IconTrophy,
     },
     {

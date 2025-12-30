@@ -26,7 +26,7 @@ export default function EditCompetitionPage() {
   useEffect(() => {
     // Redirect if competitions are loaded but the specific competition is not found.
     if (competitions.length > 0 && !competition) {
-      router.push("/dashboard/competitions");
+      router.push("/competitions");
     }
   }, [competitions, competition, router]);
 
@@ -34,7 +34,7 @@ export default function EditCompetitionPage() {
     e.preventDefault();
     if (competition) {
       updateCompetition(competition.id, { name, type, isFavorite });
-      router.push("/dashboard/competitions");
+      router.push("/competitions");
     }
   };
 
@@ -73,7 +73,7 @@ export default function EditCompetitionPage() {
             </div>
             <div className="flex justify-end space-x-2">
               <Button type="button" variant="outline" asChild>
-                <Link href="/dashboard/competitions">Cancel</Link>
+                <Link href="/competitions">Cancel</Link>
               </Button>
               <Button type="submit">Save Changes</Button>
             </div>

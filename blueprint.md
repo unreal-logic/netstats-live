@@ -31,15 +31,13 @@ NetStat Live is a modern, responsive dashboard application for managing sports-r
 *   **Interactive Charts:** Provides interactive data visualizations.
 *   **Data Table:** A table for displaying and managing data.
 
-## Current Plan: Initial Setup & Sidebar Navigation
+## Current Plan: Refactor Competitions Feature
 
-*   **Objective:** To set up the initial sidebar navigation and controls for the NetStat Live dashboard.
+*   **Objective:** To move the "competitions" feature from the "dashboard" route to its own top-level route.
 *   **Steps Taken:**
-    1.  Added a "Competitions" item to the sidebar navigation.
-    2.  Added a "Manage Teams" item to the sidebar navigation.
-    3.  Added a "Manage Venues" item to the sidebar navigation.
-    4.  Renamed "Manage Teams" to "Teams" for a cleaner look.
-    5.  Renamed "Manage Venues" to "Venues" for a cleaner look.
-    6.  Changed the "Venues" icon to a map pin.
-    7.  Changed the "New Game" icon to a circle play icon.
-    8.  Added a volleyball logo to the left of the app name.
+    1.  Moved the competitions pages from `src/app/dashboard/competitions` to `src/app/competitions`.
+    2.  Created new `page.tsx`, `new/page.tsx`, and `[id]/edit/page.tsx` files under `src/app/competitions`.
+    3.  Updated all links and redirects in the new files to point to the new `/competitions` route.
+    4.  Updated the sidebar navigation to link to `/competitions`.
+    5.  Deleted the old `src/app/dashboard/competitions` directory and its contents.
+    6.  Updated `CompetitionContext.tsx` to ensure proper functionality with the new route.
