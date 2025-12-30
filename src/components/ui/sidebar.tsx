@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
@@ -599,6 +599,11 @@ function SidebarMenuBadge({
   )
 }
 
+// By moving the random width calculation out of the component, we ensure it's only
+// calculated once when the module is loaded. This is necessary to prevent an
+// impure function call in the render, which can lead to unpredictable behavior.
+const randomWidth = `${Math.floor(Math.random() * 40) + 50}%`;
+
 function SidebarMenuSkeleton({
   className,
   showIcon = false,
@@ -606,9 +611,9 @@ function SidebarMenuSkeleton({
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean
 }) {
-  // Random width between 50 to 90%.
   const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`
+    // Random width between 50 to 90%.
+    return randomWidth;
   }, [])
 
   return (
