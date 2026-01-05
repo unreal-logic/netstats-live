@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import * as React from "react"
 import {
@@ -47,12 +47,12 @@ const data = {
     },
     {
       title: "Teams",
-      url: "#",
+      url: "/teams",
       icon: IconUsers,
     },
     {
       title: "Venues",
-      url: "#",
+      url: "/venues",
       icon: IconMapPin,
     },
     {
@@ -75,7 +75,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <a href="#" className="flex items-center gap-2">
                 <IconBallVolleyball className="text-primary" />
-                <span className="text-base font-semibold">NetStat Live</span>
+                <span className="text-base font-semibold">NetStats Live</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

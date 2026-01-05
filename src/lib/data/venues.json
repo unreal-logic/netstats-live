@@ -1,0 +1,20 @@
+[
+  {
+    "id": "VEN-001",
+    "name": "City Arena",
+    "location": "New York, NY",
+    "type": "indoor"
+  },
+  {
+    "id": "VEN-002",
+    "name": "Sunset Park",
+    "location": "Los Angeles, CA",
+    "type": "outdoor"
+  },
+  {
+    "id": "VEN-003",
+    "name": "The Dome",
+    "location": "Chicago, IL",
+    "type": "indoor"
+  }
+]

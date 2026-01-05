@@ -70,23 +70,22 @@ function DraggableRow<TData extends { id: UniqueIdentifier }>({
   )
 }
 
-interface CompetitionDataTableProps<TData extends { id: UniqueIdentifier }> {
+interface VenuesDataTableProps<TData extends { id: UniqueIdentifier }> {
   columns: ColumnDef<TData, unknown>[]
   data: TData[]
   setData: React.Dispatch<React.SetStateAction<TData[]>>
 }
 
-export function CompetitionDataTable<TData extends { id: UniqueIdentifier }>({ 
+export function VenuesDataTable<TData extends { id: UniqueIdentifier }>({ 
     columns = [], 
     data, 
     setData 
-}: CompetitionDataTableProps<TData>) {
+}: VenuesDataTableProps<TData>) {
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
   });
 
-  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,

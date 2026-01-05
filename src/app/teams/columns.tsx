@@ -5,7 +5,6 @@ import Link from "next/link"
 import { MoreHorizontal, Star, ArrowUpDown, GripVertical } from "lucide-react"
 import { useSortable } from "@dnd-kit/sortable"
 
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -15,15 +14,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Competition } from "@/context/CompetitionContext"
+import { Team } from "@/context/TeamContext"
 
-// Extend the competition type to include the functions passed from the page
-interface CompetitionsColumn extends Competition {
-  handleDeleteClick: (competition: Competition) => void
+// Extend the team type to include the functions passed from the page
+interface TeamsColumn extends Team {
+  handleDeleteClick: (team: Team) => void
   toggleFavorite: (id: string, isFavorite: boolean) => void
 }
 
-const DraggableHandle = ({ row }: { row: Row<CompetitionsColumn> }) => {
+const DraggableHandle = ({ row }: { row: Row<TeamsColumn> }) => {
     const { attributes, listeners, setNodeRef } = useSortable({
         id: row.original.id,
     });
@@ -35,7 +34,7 @@ const DraggableHandle = ({ row }: { row: Row<CompetitionsColumn> }) => {
     );
 };
 
-export const columns: ColumnDef<CompetitionsColumn>[] = [
+export const columns: ColumnDef<TeamsColumn>[] = [
   {
     id: "drag-handle",
     header: () => null,
@@ -83,13 +82,13 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
       )
     },
     cell: ({ row }) => {
-      const competition = row.original
+      const team = row.original
       return (
         <Link
-          href={`/competitions/${competition.id}/games`}
+          href={`/teams/${team.id}/edit`}
           className='font-medium text-primary hover:underline'
         >
-          {competition.name}
+          {team.name}
         </Link>
       )
     },
@@ -99,22 +98,22 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
     accessorKey: "isFavorite",
     header: () => <div className='text-center'>Favorite</div>,
     cell: ({ row }) => {
-      const competition = row.original
+      const team = row.original
       return (
         <div className='text-center'>
           <Button
             variant='ghost'
             size='icon'
             onClick={() =>
-              competition.toggleFavorite(competition.id, competition.isFavorite)
+              team.toggleFavorite(team.id, team.isFavorite)
             }
             className={`transition-colors ${
-              competition.isFavorite
+              team.isFavorite
                 ? "text-yellow-400 hover:text-yellow-500"
                 : "text-muted-foreground hover:text-yellow-400"
             }`}
           >
-            <Star className={`h-5 w-5 ${competition.isFavorite ? 'fill-current' : ''}`} />
+            <Star className={`h-5 w-5 ${team.isFavorite ? 'fill-current' : ''}`} />
             <span className='sr-only'>Toggle Favorite</span>
           </Button>
         </div>
@@ -124,36 +123,7 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "type",
-    header: ({ column }) => {
-      return (
-        <div className="text-center">
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Type
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      )
-    },
-    cell: ({ row }) => {
-      const competition = row.original
-      return (
-        <div className="text-center">
-            <Badge
-              variant={competition.type === "season" ? "season" : "tournament"}
-              className="capitalize"
-            >
-              {competition.type}
-            </Badge>
-        </div>
-      )
-    },
-  },
-  {
-    accessorKey: "games",
+    accessorKey: "players",
     header: ({ column }) => {
         return (
           <div className="text-center">
@@ -161,20 +131,20 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              Games
+              Players
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           </div>
         )
     },
     cell: ({ row }) => {
-      return <div className="text-center tabular-nums">{row.original.games.length}</div>
+      return <div className="text-center tabular-nums">{row.original.players.length}</div>
     },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const competition = row.original
+      const team = row.original
 
       return (
         <div className="text-right">
@@ -188,10 +158,10 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem asChild>
-                <Link href={`/competitions/${competition.id}/edit`}>Edit</Link>
+                <Link href={`/teams/${team.id}/edit`}>Edit</Link>
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => competition.handleDeleteClick(competition)}
+                onClick={() => team.handleDeleteClick(team)}
                 className="text-red-600"
               >
                 Delete

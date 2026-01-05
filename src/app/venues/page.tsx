@@ -9,8 +9,9 @@ import {
   Grid,
   List,
   ArrowRight,
+  MapPin,
 } from "lucide-react"
-import { useCompetitions, Competition } from "@/context/CompetitionContext"
+import { useVenues, Venue } from "@/context/VenueContext"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -57,68 +58,70 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { CompetitionDataTable } from "@/components/competition-data-table"
+import { VenuesDataTable } from "@/components/venues-data-table"
 import { columns } from "./columns"
 
-export default function CompetitionsPage() {
-  const { competitions, addCompetition, deleteCompetition, updateCompetition, setCompetitions } = useCompetitions()
+export default function VenuesPage() {
+  const { venues, addVenue, deleteVenue, updateVenue, setVenues } = useVenues()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
-  const [selectedCompetition, setSelectedCompetition] = useState<Competition | null>(null)
+  const [selectedVenue, setSelectedVenue] = useState<Venue | null>(null)
   const [layout, setLayout] = useState<"table" | "card">("table")
   const [typeFilter, setTypeFilter] = useState<string>("all")
   const [favoriteFilter, setFavoriteFilter] = useState<string>("all")
 
-  // State for the new competition form
+  // State for the new venue form
   const [newName, setNewName] = useState('');
-  const [newType, setNewType] = useState<'season' | 'tournament'>('season');
+  const [newLocation, setNewLocation] = useState('');
+  const [newType, setNewType] = useState<'indoor' | 'outdoor'>('indoor');
   const [newIsFavorite, setNewIsFavorite] = useState(false);
 
-  const displayCompetitions = useMemo(() => {
-    return competitions.filter(comp => {
-      const typeMatch = typeFilter === "all" || comp.type === typeFilter;
-      const favoriteMatch = favoriteFilter === "all" || (favoriteFilter === "favorites" && comp.isFavorite);
+  const displayVenues = useMemo(() => {
+    return venues.filter(venue => {
+      const typeMatch = typeFilter === "all" || venue.type === typeFilter;
+      const favoriteMatch = favoriteFilter === "all" || (favoriteFilter === "favorites" && venue.isFavorite);
       return typeMatch && favoriteMatch;
     });
-  }, [competitions, typeFilter, favoriteFilter])
+  }, [venues, typeFilter, favoriteFilter])
 
-  const handleDeleteClick = (competition: Competition) => {
-    setSelectedCompetition(competition)
+  const handleDeleteClick = (venue: Venue) => {
+    setSelectedVenue(venue)
     setDeleteDialogOpen(true)
   }
 
   const handleConfirmDelete = () => {
-    if (selectedCompetition) {
-      deleteCompetition(selectedCompetition.id)
-      setSelectedCompetition(null)
+    if (selectedVenue) {
+      deleteVenue(selectedVenue.id)
+      setSelectedVenue(null)
     }
     setDeleteDialogOpen(false)
   }
 
-  const handleCreateCompetition = () => {
-    if (!newName || !newType) {
+  const handleCreateVenue = () => {
+    if (!newName || !newLocation) {
       alert('Please fill in all fields.');
       return;
     }
-    addCompetition({ name: newName, type: newType, isFavorite: newIsFavorite });
+    addVenue({ name: newName, location: newLocation, type: newType, isFavorite: newIsFavorite });
     setCreateDialogOpen(false);
     // Reset form fields
     setNewName('');
-    setNewType('season');
+    setNewLocation('');
+    setNewType('indoor');
     setNewIsFavorite(false);
   };
   
   const toggleFavorite = (id: string, isFavorite: boolean) => {
-    updateCompetition(id, { isFavorite: !isFavorite })
+    updateVenue(id, { isFavorite: !isFavorite })
   }
 
-  const handleSetDisplayCompetitions = (newCompetitions: Competition[]) => {
-    const updatedCompetitions = newCompetitions.map(({ ...rest }) => rest);
-    setCompetitions(updatedCompetitions)
+  const handleSetDisplayVenues = (newVenues: Venue[]) => {
+    const updatedVenues = newVenues.map(({ ...rest }) => rest);
+    setVenues(updatedVenues)
   }
 
-  const competitionsWithActions = displayCompetitions.map((comp) => ({
-    ...comp,
+  const venuesWithActions = displayVenues.map((venue) => ({
+    ...venue,
     handleDeleteClick: handleDeleteClick,
     toggleFavorite: toggleFavorite,
   }))
@@ -127,10 +130,9 @@ export default function CompetitionsPage() {
     <>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Your Seasons & Tournaments</h1>
+          <h1 className="text-3xl font-bold">Your Venues</h1>
           <p className="text-muted-foreground">
-            Select a competition to view its games, or create a new one to get
-            started.
+            Manage your game and training locations.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -140,8 +142,8 @@ export default function CompetitionsPage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="season">Seasons</SelectItem>
-              <SelectItem value="tournament">Tournaments</SelectItem>
+              <SelectItem value="indoor">Indoor</SelectItem>
+              <SelectItem value="outdoor">Outdoor</SelectItem>
             </SelectContent>
           </Select>
           <Select value={favoriteFilter} onValueChange={setFavoriteFilter}>
@@ -173,35 +175,44 @@ export default function CompetitionsPage() {
             <DialogTrigger asChild>
                 <Button className="ml-4">
                 <PlusCircle className="h-4 w-4 mr-2" />
-                New Competition
+                New Venue
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                <DialogTitle>Create New Competition</DialogTitle>
+                <DialogTitle>Create New Venue</DialogTitle>
                 <DialogDescription>
-                    A competition is a collection of games, like a season or a tournament.
+                    Add a new location for your games and training sessions.
                 </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-6 py-4">
                     <div className="space-y-2">
-                        <Label htmlFor="name">Competition Name</Label>
+                        <Label htmlFor="name">Venue Name</Label>
                         <Input 
                             id="name" 
-                            placeholder="e.g., Winter League 2024" 
+                            placeholder="e.g., Central Sports Arena" 
                             value={newName}
                             onChange={(e) => setNewName(e.target.value)}
                         />
                     </div>
                     <div className="space-y-2">
+                        <Label htmlFor="name">Location</Label>
+                        <Input 
+                            id="location" 
+                            placeholder="e.g., 123 Main St, Anytown"
+                            value={newLocation}
+                            onChange={(e) => setNewLocation(e.target.value)}
+                        />
+                    </div>
+                    <div className="space-y-2">
                         <Label htmlFor="type">Type</Label>
-                        <Select onValueChange={(value: 'season' | 'tournament') => setNewType(value)} defaultValue={newType}>
+                        <Select onValueChange={(value: 'indoor' | 'outdoor') => setNewType(value)} defaultValue={newType}>
                             <SelectTrigger id="type">
-                            <SelectValue placeholder="Select competition type" />
+                            <SelectValue placeholder="Select venue type" />
                             </SelectTrigger>
                             <SelectContent>
-                            <SelectItem value="season">Season</SelectItem>
-                            <SelectItem value="tournament">Tournament</SelectItem>
+                            <SelectItem value="indoor">Indoor</SelectItem>
+                            <SelectItem value="outdoor">Outdoor</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -222,7 +233,7 @@ export default function CompetitionsPage() {
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>Cancel</Button>
-                    <Button onClick={handleCreateCompetition}>Create</Button>
+                    <Button onClick={handleCreateVenue}>Create</Button>
                 </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -230,10 +241,10 @@ export default function CompetitionsPage() {
       </div>
 
       {layout === "table" ? (
-        <CompetitionDataTable 
+        <VenuesDataTable 
           columns={columns} 
-          data={competitionsWithActions} 
-          setData={handleSetDisplayCompetitions as React.Dispatch<React.SetStateAction<Competition[]>>} 
+          data={venuesWithActions} 
+          setData={handleSetDisplayVenues as React.Dispatch<React.SetStateAction<Venue[]>>} 
         />
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -244,19 +255,19 @@ export default function CompetitionsPage() {
                 <div className="flex flex-col items-center gap-2 text-muted-foreground">
                 <PlusCircle className="h-5 w-5 transition-colors group-hover:text-primary" />
                 <span className="font-semibold text-center text-foreground group-hover:text-primary transition-colors">
-                    Create New Competition
+                    Create New Venue
                 </span>
                 </div>
             </div>
-          {displayCompetitions.map((comp) => (
+          {displayVenues.map((venue) => (
             <Card
-              key={comp.id}
+              key={venue.id}
               className="group flex flex-col border transition-all duration-300 hover:border-primary hover:shadow-lg"
             >
               <CardHeader className="p-4">
                 <div className="flex justify-between items-start">
                   <CardTitle className="text-base font-semibold group-hover:text-primary transition-colors">
-                    {comp.name}
+                    {venue.name}
                   </CardTitle>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -272,12 +283,12 @@ export default function CompetitionsPage() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       <DropdownMenuItem asChild>
-                        <Link href={`/competitions/${comp.id}/edit`}>
+                        <Link href={`/venues/${venue.id}/edit`}>
                           Edit
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => handleDeleteClick(comp)}
+                        onClick={() => handleDeleteClick(venue)}
                         className="text-red-600"
                       >
                         Delete
@@ -285,30 +296,29 @@ export default function CompetitionsPage() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-                <div className="flex items-center justify-between pt-2">
-                <Badge
-                    variant={comp.type === 'season' ? 'season' : 'tournament'}
-                    className="capitalize"
-                >
-                    {comp.type}
-                </Badge>
+                 <div className="flex items-center justify-between pt-2">
+                    <Badge
+                        variant={venue.type === 'indoor' ? 'default' : 'secondary'}
+                        className="capitalize"
+                    >
+                        {venue.type}
+                    </Badge>
                     <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => toggleFavorite(comp.id, comp.isFavorite)}
-                        className={`transition-colors ${comp.isFavorite ? "text-yellow-400 hover:text-yellow-500" : "text-muted-foreground hover:text-yellow-400"}`}>
-                        <Star className={`h-5 w-5 ${comp.isFavorite ? 'fill-current' : ''}`} />
+                        onClick={() => toggleFavorite(venue.id, venue.isFavorite)}
+                        className={`transition-colors ${venue.isFavorite ? "text-yellow-400 hover:text-yellow-500" : "text-muted-foreground hover:text-yellow-400"}`}>
+                        <Star className={`h-5 w-5 ${venue.isFavorite ? 'fill-current' : ''}`} />
                         <span className="sr-only">Favorite</span>
                     </Button>
                 </div>
               </CardHeader>
-              <CardContent className="p-2 flex-grow flex flex-col items-center justify-center text-center">
-                 <p className="text-4xl font-bold tabular-nums text-foreground">{comp.games.length}</p>
-                 <p className="text-xs font-medium text-muted-foreground mt-1">Games</p>
+              <CardContent className="p-2 flex-grow flex flex-col items-start justify-center">
+                 <p className="text-sm font-medium text-muted-foreground flex items-center gap-2"><MapPin className="h-4 w-4" /> {venue.location}</p>
               </CardContent>
               <CardFooter className="p-4">
                 <Button asChild variant="outline" className="w-full">
-                    <Link href={`/competitions/${comp.id}/games`}>
+                    <Link href={`/venues/${venue.id}/games`}>
                         View Games
                         <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -325,8 +335,8 @@ export default function CompetitionsPage() {
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the{" "}
-              <span className="font-bold">{selectedCompetition?.name}</span>
-              competition.
+              <span className="font-bold">{selectedVenue?.name}</span>
+              venue.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

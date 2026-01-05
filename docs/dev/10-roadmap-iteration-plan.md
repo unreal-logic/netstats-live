@@ -1,5 +1,5 @@
 
-# 10. Roadmap & Iteration Plan - NetStat Live
+# 10. Roadmap & Iteration Plan - NetStats Live
 
 This document outlines the phased development plan for the application, starting from the current state and looking toward future enhancements.
 

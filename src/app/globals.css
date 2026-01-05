@@ -20,6 +20,10 @@
   --accent-foreground: oklch(0.3791 0.1378 265.5222);
   --destructive: oklch(0.6368 0.2078 25.3313);
   --destructive-foreground: oklch(1.0000 0 0);
+  --season-badge: oklch(0.6 0.2 240);
+  --season-badge-foreground: oklch(0.95 0.05 240);
+  --tournament-badge: oklch(0.6 0.2 280);
+  --tournament-badge-foreground: oklch(0.95 0.05 280);
   --border: oklch(0.9276 0.0058 264.5313);
   --input: oklch(0.9276 0.0058 264.5313);
   --ring: oklch(0.6231 0.1880 259.8145);
@@ -126,6 +130,10 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-season-badge: var(--season-badge);
+  --color-season-badge-foreground: var(--season-badge-foreground);
+  --color-tournament-badge: var(--tournament-badge);
+  --color-tournament-badge-foreground: var(--tournament-badge-foreground);
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);

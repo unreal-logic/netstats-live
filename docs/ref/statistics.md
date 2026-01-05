@@ -1,4 +1,4 @@
-# NetStat Live: Statistics Overview
+# NetStats Live: Statistics Overview
 
 Based on the app's current implementation, here is a comprehensive list of the statistics that are being tracked.
 

@@ -26,26 +26,36 @@ const CompetitionContext = createContext<CompetitionContextType | undefined>(und
 
 // 3. CREATE THE PROVIDER COMPONENT
 
-export const CompetitionProvider = ({ children }: { children: ReactNode }) => {
-    const [competitions, setCompetitions] = useState<Competition[]>([]);
+const sampleCompetitions: Competition[] = [
+    {
+        id: "1",
+        name: "Summer Showdown 2024",
+        type: "tournament",
+        games: [],
+        isFavorite: true,
+    },
+    {
+        id: "2",
+        name: "Winter League 2024",
+        type: "season",
+        games: [],
+        isFavorite: false,
+    },
+];
 
-    useEffect(() => {
+export const CompetitionProvider = ({ children }: { children: ReactNode }) => {
+    const [competitions, setCompetitions] = useState<Competition[]>(() => {
         try {
             const savedCompetitions = localStorage.getItem('competitions');
-            if (savedCompetitions) {
-                // eslint-disable-next-line react-hooks/set-state-in-effect
-                setCompetitions(JSON.parse(savedCompetitions));
-            }
+            return savedCompetitions ? JSON.parse(savedCompetitions) : sampleCompetitions;
         } catch (error) {
             console.error("Failed to parse competitions from localStorage", error);
+            return sampleCompetitions;
         }
-    }, []);
+    });
 
     useEffect(() => {
-        // Prevents saving the initial empty array to localStorage on first render.
-        if (competitions.length > 0) {
-            localStorage.setItem('competitions', JSON.stringify(competitions));
-        }
+        localStorage.setItem('competitions', JSON.stringify(competitions));
     }, [competitions]);
 
   const addCompetition = (competition: Omit<Competition, 'id' | 'games'>) => {

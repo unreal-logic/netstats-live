@@ -2,7 +2,7 @@
 
 import { ColumnDef, Row } from "@tanstack/react-table"
 import Link from "next/link"
-import { MoreHorizontal, Star, ArrowUpDown, GripVertical } from "lucide-react"
+import { MoreHorizontal, Star, ArrowUpDown, GripVertical, MapPin } from "lucide-react"
 import { useSortable } from "@dnd-kit/sortable"
 
 import { Badge } from "@/components/ui/badge"
@@ -15,15 +15,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Competition } from "@/context/CompetitionContext"
+import { Venue } from "@/context/VenueContext"
 
-// Extend the competition type to include the functions passed from the page
-interface CompetitionsColumn extends Competition {
-  handleDeleteClick: (competition: Competition) => void
+// Extend the venue type to include the functions passed from the page
+interface VenuesColumn extends Venue {
+  handleDeleteClick: (venue: Venue) => void
   toggleFavorite: (id: string, isFavorite: boolean) => void
 }
 
-const DraggableHandle = ({ row }: { row: Row<CompetitionsColumn> }) => {
+const DraggableHandle = ({ row }: { row: Row<VenuesColumn> }) => {
     const { attributes, listeners, setNodeRef } = useSortable({
         id: row.original.id,
     });
@@ -35,7 +35,7 @@ const DraggableHandle = ({ row }: { row: Row<CompetitionsColumn> }) => {
     );
 };
 
-export const columns: ColumnDef<CompetitionsColumn>[] = [
+export const columns: ColumnDef<VenuesColumn>[] = [
   {
     id: "drag-handle",
     header: () => null,
@@ -83,13 +83,13 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
       )
     },
     cell: ({ row }) => {
-      const competition = row.original
+      const venue = row.original
       return (
         <Link
-          href={`/competitions/${competition.id}/games`}
+          href={`/venues/${venue.id}/games`}
           className='font-medium text-primary hover:underline'
         >
-          {competition.name}
+          {venue.name}
         </Link>
       )
     },
@@ -99,22 +99,22 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
     accessorKey: "isFavorite",
     header: () => <div className='text-center'>Favorite</div>,
     cell: ({ row }) => {
-      const competition = row.original
+      const venue = row.original
       return (
         <div className='text-center'>
           <Button
             variant='ghost'
             size='icon'
             onClick={() =>
-              competition.toggleFavorite(competition.id, competition.isFavorite)
+              venue.toggleFavorite(venue.id, venue.isFavorite)
             }
             className={`transition-colors ${
-              competition.isFavorite
+              venue.isFavorite
                 ? "text-yellow-400 hover:text-yellow-500"
                 : "text-muted-foreground hover:text-yellow-400"
             }`}
           >
-            <Star className={`h-5 w-5 ${competition.isFavorite ? 'fill-current' : ''}`} />
+            <Star className={`h-5 w-5 ${venue.isFavorite ? 'fill-current' : ''}`} />
             <span className='sr-only'>Toggle Favorite</span>
           </Button>
         </div>
@@ -122,6 +122,26 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
     },
     enableSorting: false,
     enableHiding: false,
+  },
+   {
+    accessorKey: "location",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Location
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const venue = row.original
+      return (
+        <div className="flex items-center gap-2"><MapPin className="h-4 w-4" /> {venue.location}</div>
+      )
+    },
   },
   {
     accessorKey: "type",
@@ -139,42 +159,23 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
       )
     },
     cell: ({ row }) => {
-      const competition = row.original
+      const venue = row.original
       return (
         <div className="text-center">
             <Badge
-              variant={competition.type === "season" ? "season" : "tournament"}
+              variant={venue.type === "indoor" ? "default" : "secondary"}
               className="capitalize"
             >
-              {competition.type}
+              {venue.type}
             </Badge>
         </div>
       )
     },
   },
   {
-    accessorKey: "games",
-    header: ({ column }) => {
-        return (
-          <div className="text-center">
-            <Button
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Games
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
-        )
-    },
-    cell: ({ row }) => {
-      return <div className="text-center tabular-nums">{row.original.games.length}</div>
-    },
-  },
-  {
     id: "actions",
     cell: ({ row }) => {
-      const competition = row.original
+      const venue = row.original
 
       return (
         <div className="text-right">
@@ -188,10 +189,10 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem asChild>
-                <Link href={`/competitions/${competition.id}/edit`}>Edit</Link>
+                <Link href={`/venues/${venue.id}/edit`}>Edit</Link>
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => competition.handleDeleteClick(competition)}
+                onClick={() => venue.handleDeleteClick(venue)}
                 className="text-red-600"
               >
                 Delete

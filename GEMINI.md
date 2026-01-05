@@ -1,8 +1,8 @@
-# Project Report: NetStat Live
+# Project Report: NetStats Live
 
 ## 1. Project Overview & Goal
 
-**NetStat Live** is a real-time netball statistics tracking application designed for coaches, players, and statisticians.
+**NetStats Live** is a real-time netball statistics tracking application designed for coaches, players, and statisticians.
 
 *   **Goal**: To provide a fast, accurate, and intuitive tool for recording, viewing, and analyzing netball game statistics in real-time.
 *   **Problem Solved**: It addresses the shortcomings of manual stat tracking, which is often slow, error-prone, and lacks immediate in-game insights. It aims to be a more accessible and versatile alternative to existing digital solutions, with support for various game formats like Fast5 and 6-a-side netball.
@@ -157,7 +157,7 @@ For data mutations (e.g., form submissions), the AI will use Server Actions to c
 
 *Example of a simple Server Action:*
 
-```ts
+'''ts
 // app/actions.ts
 'use server'
 
@@ -180,7 +180,7 @@ export async function-save-email(prevState: any, formData: FormData) {
   // Save email to database...
   return { message: 'Success!' }
 }
-```
+'''
 
 ## **Automated Error Detection & Remediation**
 

@@ -1,5 +1,5 @@
 
-# 8. Technical Constraints & Preferences - NetStat Live
+# 8. Technical Constraints & Preferences - NetStats Live
 
 This document outlines the technical stack, architectural decisions, and other constraints for the project.
 

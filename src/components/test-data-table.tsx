@@ -28,6 +28,13 @@ import {
   type ColumnDef,
   type Row,
   type Cell,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getSortedRowModel,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
 } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
@@ -39,6 +46,7 @@ import {
     TableHeader, 
     TableRow
 } from "@/components/ui/table"
+import { DataTableToolbar } from "./data-table-toolbar"
 
 interface DraggableRowProps<TData> {
   row: Row<TData>;
@@ -70,33 +78,52 @@ function DraggableRow<TData extends { id: UniqueIdentifier }>({
   )
 }
 
-interface CompetitionDataTableProps<TData extends { id: UniqueIdentifier }> {
+interface DataTableProps<TData extends { id: UniqueIdentifier }> {
   columns: ColumnDef<TData, unknown>[]
   data: TData[]
-  setData: React.Dispatch<React.SetStateAction<TData[]>>
+  setData?: React.Dispatch<React.SetStateAction<TData[]>>
 }
 
-export function CompetitionDataTable<TData extends { id: UniqueIdentifier }>({ 
+export function DataTable<TData extends { id: UniqueIdentifier }>({ 
     columns = [], 
     data, 
     setData 
-}: CompetitionDataTableProps<TData>) {
+}: DataTableProps<TData>) {
+  const [rowSelection, setRowSelection] = React.useState({})
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({})
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
+  const [sorting, setSorting] = React.useState<SortingState>([])
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
   });
 
-  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getRowId: (row) => row.id.toString(),
     state: {
+      sorting,
+      columnVisibility,
+      rowSelection,
+      columnFilters,
       pagination,
     },
+    getRowId: (row) => row.id.toString(),
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
   })
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(() => data.map(({ id }) => id), [data])
@@ -110,16 +137,19 @@ export function CompetitionDataTable<TData extends { id: UniqueIdentifier }>({
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
     if (active && over && active.id !== over.id) {
-      setData((currentData) => {
-        const oldIndex = currentData.findIndex(item => item.id === active.id)
-        const newIndex = currentData.findIndex(item => item.id === over.id)
-        return arrayMove(currentData, oldIndex, newIndex)
-      })
+        if (setData) {
+            setData((currentData) => {
+                const oldIndex = currentData.findIndex(item => item.id === active.id)
+                const newIndex = currentData.findIndex(item => item.id === over.id)
+                return arrayMove(currentData, oldIndex, newIndex)
+            })
+        }
     }
   }
 
   return (
-    <>
+    <div className="space-y-4">
+      <DataTableToolbar table={table} />
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -178,6 +208,6 @@ export function CompetitionDataTable<TData extends { id: UniqueIdentifier }>({
           </Button>
         </div>
       </div>
-    </>
+    </div>
   )
 }

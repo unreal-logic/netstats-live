@@ -70,17 +70,17 @@ function DraggableRow<TData extends { id: UniqueIdentifier }>({
   )
 }
 
-interface CompetitionDataTableProps<TData extends { id: UniqueIdentifier }> {
+interface TeamsDataTableProps<TData extends { id: UniqueIdentifier }> {
   columns: ColumnDef<TData, unknown>[]
   data: TData[]
   setData: React.Dispatch<React.SetStateAction<TData[]>>
 }
 
-export function CompetitionDataTable<TData extends { id: UniqueIdentifier }>({ 
+export function TeamsDataTable<TData extends { id: UniqueIdentifier }>({ 
     columns = [], 
     data, 
     setData 
-}: CompetitionDataTableProps<TData>) {
+}: TeamsDataTableProps<TData>) {
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,

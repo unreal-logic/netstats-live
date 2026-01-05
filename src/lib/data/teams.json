@@ -1,0 +1,56 @@
+[
+  {
+    "id": "1",
+    "name": "Swift Swallows",
+    "isFavorite": true,
+    "players": [
+      { "id": "p1", "name": "Ava" },
+      { "id": "p2", "name": "Bella" }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Mighty Magpies",
+    "isFavorite": false,
+    "players": [
+      { "id": "p3", "name": "Chloe" },
+      { "id": "p4", "name": "Daisy" }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Fierce Falcons",
+    "isFavorite": true,
+    "players": [
+      { "id": "p5", "name": "Eve" },
+      { "id": "p6", "name": "Freya" }
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Thundering Thunderbirds",
+    "isFavorite": false,
+    "players": [
+      { "id": "p7", "name": "Grace" },
+      { "id": "p8", "name": "Heidi" }
+    ]
+  },
+  {
+    "id": "5",
+    "name": "West Coast Fever",
+    "isFavorite": true,
+    "players": [
+      { "id": "p9", "name": "Ivy" },
+      { "id": "p10", "name": "Jade" }
+    ]
+  },
+  {
+    "id": "6",
+    "name": "Melbourne Vixens",
+    "isFavorite": false,
+    "players": [
+      { "id": "p11", "name": "Kate" },
+      { "id": "p12", "name": "Lily" }
+    ]
+  }
+]
