@@ -1,0 +1,20 @@
+[
+  {
+    "id": "COMP-001",
+    "name": "Summer League 2024",
+    "isFavorite": true,
+    "gameCount": 12
+  },
+  {
+    "id": "COMP-002",
+    "name": "Winter Championship",
+    "isFavorite": false,
+    "gameCount": 8
+  },
+  {
+    "id": "COMP-003",
+    "name": "Regional Tournament",
+    "isFavorite": false,
+    "gameCount": 24
+  }
+]

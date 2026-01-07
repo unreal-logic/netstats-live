@@ -1,67 +1,42 @@
-'use client'
+"use client"
 
-import { type ColumnDef } from "@tanstack/react-table"
+import { ColumnDef } from "@tanstack/react-table"
+import { z } from "zod"
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
+import { DataTableRowActions } from "@/components/data-table/data-table-row-actions"
 
-import { Badge } from "@/components/ui/badge"
-import { Checkbox } from "@/components/ui/checkbox"
+export const schema = z.object({
+  id: z.string(),
+  title: z.string(),
+  status: z.string(),
+  label: z.string(),
+  priority: z.string(),
+})
 
-import { DataTableColumnHeader } from "@/components/data-table-column-header"
-import { DataTableRowActions } from "@/components/data-table-row-actions"
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Task = {
-  id: number
-  header: string
-  type: string
-  status: string
-  target: string
-  limit: string
-  reviewer: string
-}
-
-export const columns: ColumnDef<Task>[] = [
+export const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
     id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="translate-y-[2px]"
-      />
+    header: () => (
+      <div/>
     ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="translate-y-[2px]"
-      />
+    cell: () => (
+      <div/>
     ),
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: "header",
+    accessorKey: "title",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Header" />
+      <DataTableColumnHeader column={column} title="Title" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("header")}</div>,
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "type",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Type" />,
     cell: ({ row }) => {
+      const label = row.original.label
       return (
         <div className="flex space-x-2">
+          {label && <div className="w-2 h-2 rounded-full bg-red-500" />}
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("type")}
+            {row.getValue("title")}
           </span>
         </div>
       )
@@ -73,10 +48,10 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const status = row.getValue("status") as string;
+      const status = row.original.status
       return (
         <div className="flex w-[100px] items-center">
-            <Badge variant={status === "Done" ? "default" : "secondary"}>{status}</Badge>
+          <span>{status}</span>
         </div>
       )
     },
@@ -85,14 +60,15 @@ export const columns: ColumnDef<Task>[] = [
     },
   },
   {
-    accessorKey: "reviewer",
+    accessorKey: "priority",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Reviewer" />
+      <DataTableColumnHeader column={column} title="Priority" />
     ),
     cell: ({ row }) => {
+      const priority = row.original.priority
       return (
         <div className="flex items-center">
-          <span>{row.getValue("reviewer")}</span>
+          <span>{priority}</span>
         </div>
       )
     },

@@ -2,7 +2,7 @@
 
 import { ColumnDef, Row } from "@tanstack/react-table"
 import Link from "next/link"
-import { MoreHorizontal, Star, ArrowUpDown, GripVertical } from "lucide-react"
+import { MoreHorizontal, Star, GripVertical } from "lucide-react"
 import { useSortable } from "@dnd-kit/sortable"
 
 import { Button } from "@/components/ui/button"
@@ -15,14 +15,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Team } from "@/context/TeamContext"
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
 
-// Extend the team type to include the functions passed from the page
-interface TeamsColumn extends Team {
-  handleDeleteClick: (team: Team) => void
-  toggleFavorite: (id: string, isFavorite: boolean) => void
-}
-
-const DraggableHandle = ({ row }: { row: Row<TeamsColumn> }) => {
+// A draggable row handle component
+const DraggableHandle = ({ row }: { row: Row<Team> }) => {
     const { attributes, listeners, setNodeRef } = useSortable({
         id: row.original.id,
     });
@@ -34,7 +30,11 @@ const DraggableHandle = ({ row }: { row: Row<TeamsColumn> }) => {
     );
 };
 
-export const columns: ColumnDef<TeamsColumn>[] = [
+// This is now a function that accepts the handlers and returns the column definitions
+export const columns = (
+  toggleFavorite: (id: string, isFavorite: boolean) => void,
+  handleDeleteClick: (team: Team) => void
+): ColumnDef<Team>[] => [
   {
     id: "drag-handle",
     header: () => null,
@@ -72,13 +72,7 @@ export const columns: ColumnDef<TeamsColumn>[] = [
     accessorKey: "name",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <DataTableColumnHeader column={column} title="Name" />
       )
     },
     cell: ({ row }) => {
@@ -105,7 +99,7 @@ export const columns: ColumnDef<TeamsColumn>[] = [
             variant='ghost'
             size='icon'
             onClick={() =>
-              team.toggleFavorite(team.id, team.isFavorite)
+              toggleFavorite(team.id, !team.isFavorite) // Use the passed-in handler
             }
             className={`transition-colors ${
               team.isFavorite
@@ -127,13 +121,7 @@ export const columns: ColumnDef<TeamsColumn>[] = [
     header: ({ column }) => {
         return (
           <div className="text-center">
-            <Button
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Players
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
+            <DataTableColumnHeader column={column} title="Players" />
           </div>
         )
     },
@@ -161,7 +149,7 @@ export const columns: ColumnDef<TeamsColumn>[] = [
                 <Link href={`/teams/${team.id}/edit`}>Edit</Link>
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => team.handleDeleteClick(team)}
+                onClick={() => handleDeleteClick(team)} // Use the passed-in handler
                 className="text-red-600"
               >
                 Delete

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "PLY-001",
+    "name": "Sarah Johnson",
+    "position": "Goal Shooter"
+  },
+  {
+    "id": "PLY-002",
+    "name": "Emily Chen",
+    "position": "Goal Attack"
+  },
+  {
+    "id": "PLY-003",
+    "name": "Jessica Davis",
+    "position": "Wing Attack"
+  },
+  {
+    "id": "PLY-004",
+    "name": "Laura Wilson",
+    "position": "Center"
+  },
+  {
+    "id": "PLY-005",
+    "name": "Megan Brown",
+    "position": "Wing Defense"
+  },
+  {
+    "id": "PLY-006",
+    "name": "Olivia Garcia",
+    "position": "Goal Defense"
+  },
+  {
+    "id": "PLY-007",
+    "name": "Sophia Martinez",
+    "position": "Goal Keeper"
+  }
+]

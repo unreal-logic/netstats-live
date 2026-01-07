@@ -11,8 +11,8 @@ import {
   IconUsers,
 } from "@tabler/icons-react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/layout/nav-main"
+import { NavUser } from "@/components/layout/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -36,6 +36,11 @@ const data = {
       icon: IconDashboard,
     },
     {
+      title: "Test Page",
+      url: "/test",
+      icon: IconChartBar,
+    },
+    {
       title: "Analytics",
       url: "#",
       icon: IconChartBar,
@@ -48,6 +53,11 @@ const data = {
     {
       title: "Teams",
       url: "/teams",
+      icon: IconUsers,
+    },
+    {
+      title: "Players",
+      url: "/players",
       icon: IconUsers,
     },
     {

@@ -1,23 +1,27 @@
 'use client'
 
-import { IconDotsVertical } from "@tabler/icons-react"
-import { type Row } from "@tanstack/react-table"
-
+import { Row } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { IconDotsVertical } from "@tabler/icons-react"
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
+  labels: { value: string; label: string }[]
 }
 
-export function DataTableRowActions<TData>({ }: DataTableRowActionsProps<TData>) {
+export function DataTableRowActions<TData>({ row, labels }: DataTableRowActionsProps<TData>) {
 
   return (
     <DropdownMenu>
@@ -35,9 +39,21 @@ export function DataTableRowActions<TData>({ }: DataTableRowActionsProps<TData>)
         <DropdownMenuItem>Make a copy</DropdownMenuItem>
         <DropdownMenuItem>Favorite</DropdownMenuItem>
         <DropdownMenuSeparator />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuRadioGroup value={row.original.label}>
+              {labels.map((label) => (
+                <DropdownMenuRadioItem key={label.value} value={label.value}>
+                  {label.label}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        <DropdownMenuSeparator />
         <DropdownMenuItem>
           Delete
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

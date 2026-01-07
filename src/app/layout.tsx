@@ -2,14 +2,15 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google"
 import "./globals.css";
 
-import { AppSidebar } from '@/components/app-sidebar'
-import { SiteHeader } from '@/components/site-header'
+import { AppSidebar } from '@/components/layout/app-sidebar'
+import { SiteHeader } from '@/components/layout/site-header'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/providers/theme-provider";
 import { CompetitionProvider } from "@/context/CompetitionContext";
 import { VenueProvider } from "@/context/VenueContext";
 import { TeamProvider } from "@/context/TeamContext";
+import { PlayerProvider } from "@/context/PlayerContext";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -43,22 +44,24 @@ export default function RootLayout({
             <CompetitionProvider>
               <VenueProvider>
                 <TeamProvider>
-                  <SidebarProvider
-                    style={
-                      {
-                        '--sidebar-width': 'calc(var(--spacing) * 72)',
-                        '--header-height': 'calc(var(--spacing) * 12)',
-                      } as React.CSSProperties
-                    }
-                  >
-                    <AppSidebar variant='inset' />
-                    <SidebarInset>
-                      <SiteHeader />
-                      <main className='p-4 lg:p-6'>
-                        {children}
-                      </main>
-                    </SidebarInset>
-                  </SidebarProvider>
+                  <PlayerProvider>
+                    <SidebarProvider
+                      style={
+                        {
+                          '--sidebar-width': 'calc(var(--spacing) * 72)',
+                          '--header-height': 'calc(var(--spacing) * 12)',
+                        } as React.CSSProperties
+                      }
+                    >
+                      <AppSidebar variant='inset' />
+                      <SidebarInset>
+                        <SiteHeader />
+                        <main className='p-4 lg:p-6'>
+                          {children}
+                        </main>
+                      </SidebarInset>
+                    </SidebarProvider>
+                  </PlayerProvider>
                 </TeamProvider>
               </VenueProvider>
             </CompetitionProvider>

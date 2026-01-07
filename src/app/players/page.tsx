@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useMemo, useCallback } from "react"
-import Link from "next/link"
-import { useTeams, Team } from "@/context/TeamContext"
+import { usePlayers, Player } from "@/context/PlayerContext"
 import { DataTable } from "@/components/data-table/data-table"
 import { GridView } from "@/components/data-table/data-grid"
 import { columns } from "./columns"
@@ -31,11 +30,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 // Icons
-import { PlusCircle, Star, Users } from "lucide-react"
+import { PlusCircle, Star } from "lucide-react"
 import { IconLayoutGrid, IconList } from "@tabler/icons-react"
 
-export default function TeamsPage() {
-  const { teams, addTeam, deleteTeam, updateTeam, setTeams } = useTeams()
+export default function PlayersPage() {
+  const { players, addPlayer, deletePlayer, updatePlayer, setPlayers } = usePlayers()
 
   // View, filter, and search states
   const [view, setView] = useState("list")
@@ -45,82 +44,83 @@ export default function TeamsPage() {
   // Dialog states
   const [dialogOpen, setDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [selectedTeam, setSelectedTeam] = useState<Team | null>(null)
+  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
 
-  // Form state for new/edit team
-  const [currentTeam, setCurrentTeam] = useState<Partial<Team>>({})
+  // Form state for new/edit player
+  const [currentPlayer, setCurrentPlayer] = useState<Partial<Player>>({})
 
-  const handleSetData = (updater: (prevData: Team[]) => Team[]) => {
-    setTeams(prevTeams => {
-      const newTeams = updater(prevTeams)
-      return newTeams.map(({ ...rest }) => rest)
+  const handleSetData = (updater: (prevData: Player[]) => Player[]) => {
+    setPlayers(prevPlayers => {
+      const newPlayers = updater(prevPlayers)
+      return newPlayers.map(({ ...rest }) => rest)
     })
   }
 
-  const handleDeleteClick = useCallback((team: Team) => {
-    setSelectedTeam(team)
+  const handleDeleteClick = useCallback((player: Player) => {
+    setSelectedPlayer(player)
     setDeleteDialogOpen(true)
   }, [])
 
   const toggleFavorite = useCallback(
     (id: string, isFavorite: boolean) => {
-      updateTeam(id, { isFavorite })
+      updatePlayer(id, { isFavorite })
     },
-    [updateTeam]
+    [updatePlayer]
   )
 
   const handleConfirmDelete = useCallback(() => {
-    if (selectedTeam) {
-      deleteTeam(selectedTeam.id)
-      setSelectedTeam(null)
+    if (selectedPlayer) {
+      deletePlayer(selectedPlayer.id)
+      setSelectedPlayer(null)
     }
     setDeleteDialogOpen(false)
-  }, [selectedTeam, deleteTeam])
+  }, [selectedPlayer, deletePlayer])
 
-  const handleCreateOrUpdateTeam = () => {
-    if (!currentTeam.name) {
-      alert("Team name is required.")
+  const handleCreateOrUpdatePlayer = () => {
+    if (!currentPlayer.name || !currentPlayer.position) {
+      alert("Please fill in all fields.")
       return
     }
 
-    if (currentTeam.id) {
-      updateTeam(currentTeam.id, currentTeam)
+    if (currentPlayer.id) {
+      updatePlayer(currentPlayer.id, currentPlayer)
     } else {
-      addTeam({
-        id: 'team-' + Date.now(),
-        name: currentTeam.name,
-        isFavorite: currentTeam.isFavorite || false,
-        players: [], // Start with an empty player list
+      addPlayer({
+        id: 'player-' + Date.now(),
+        name: currentPlayer.name,
+        position: currentPlayer.position,
+        isFavorite: currentPlayer.isFavorite || false,
       })
     }
     setDialogOpen(false)
-    setCurrentTeam({})
+    setCurrentPlayer({})
   }
 
-  const openDialog = useCallback((team?: Team) => {
-    setCurrentTeam(team || {}) 
+  const openDialog = useCallback((player?: Player) => {
+    setCurrentPlayer(player || {}) 
     setDialogOpen(true)
   }, [])
 
-  const displayTeams = useMemo(() => {
-    return teams.filter(team => {
-      const favoriteMatch = !showFavorites || team.isFavorite
+  const displayPlayers = useMemo(() => {
+    return players.filter(player => {
+      const favoriteMatch = !showFavorites || player.isFavorite
       const searchMatch = searchQuery
-        ? team.name.toLowerCase().includes(searchQuery.toLowerCase())
+        ? player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          player.position.toLowerCase().includes(searchQuery.toLowerCase())
         : true
       return favoriteMatch && searchMatch
     })
-  }, [teams, showFavorites, searchQuery])
-  
+  }, [players, showFavorites, searchQuery])
+
   const memoizedColumns = useMemo(
-    () => columns(toggleFavorite, handleDeleteClick),
-    [toggleFavorite, handleDeleteClick]
+    () => columns(toggleFavorite, openDialog, handleDeleteClick),
+    [toggleFavorite, openDialog, handleDeleteClick]
   )
 
-  const renderGridItem = (item: Team) => (
+  const renderGridItem = (item: Player) => (
     <div key={item.id} className="border p-4 rounded-lg">
       <h3 className="font-bold">{item.name}</h3>
-      {/* Further details can be added here */}
+      <p>{item.position}</p>
     </div>
   )
 
@@ -129,7 +129,7 @@ export default function TeamsPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Input
-            placeholder="Filter teams..."
+            placeholder="Filter players..."
             className="w-48"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
@@ -155,43 +155,46 @@ export default function TeamsPage() {
           </div>
           <Button onClick={() => openDialog()}>
             <PlusCircle className="mr-2 size-4" />
-            New Team
+            New Player
           </Button>
-          <Link href="/players">
-            <Button variant="outline">
-              <Users className="mr-2 size-4" />
-              Manage Players
-            </Button>
-          </Link>
         </div>
       </div>
 
       {view === 'list' ? (
         <DataTable
           columns={memoizedColumns}
-          data={displayTeams}
-          setData={handleSetData as React.Dispatch<React.SetStateAction<Team[]>>}
+          data={displayPlayers}
+          setData={handleSetData as React.Dispatch<React.SetStateAction<Player[]>>}
         />
       ) : (
-        <GridView data={displayTeams} renderItem={renderGridItem} />
+        <GridView data={displayPlayers} renderItem={renderGridItem} />
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{currentTeam.id ? "Edit Team" : "Create New Team"}</DialogTitle>
+            <DialogTitle>{currentPlayer.id ? "Edit Player" : "Create New Player"}</DialogTitle>
             <DialogDescription>
-              {currentTeam.id ? "Edit the details of your team." : "A team is a collection of players."}
+              Add a new player to your roster.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-6 py-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Team Name</Label>
+              <Label htmlFor="name">Player Name</Label>
               <Input
                 id="name"
-                placeholder="e.g., The All-Stars"
-                value={currentTeam.name || ''}
-                onChange={e => setCurrentTeam({ ...currentTeam, name: e.target.value })}
+                placeholder="e.g., Jane Doe"
+                value={currentPlayer.name || ''}
+                onChange={e => setCurrentPlayer({ ...currentPlayer, name: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="position">Position</Label>
+              <Input
+                id="position"
+                placeholder="e.g., Center"
+                value={currentPlayer.position || ''}
+                onChange={e => setCurrentPlayer({ ...currentPlayer, position: e.target.value })}
               />
             </div>
             <div className="flex items-center gap-2 pt-2">
@@ -199,9 +202,9 @@ export default function TeamsPage() {
                 variant="ghost"
                 size="icon"
                 id="favorite-button"
-                onClick={() => setCurrentTeam({ ...currentTeam, isFavorite: !currentTeam.isFavorite })}
-                className={`transition-colors ${currentTeam.isFavorite ? "text-yellow-400 hover:text-yellow-500" : "text-muted-foreground hover:text-yellow-400"}`}>
-                <Star className={`h-5 w-5 ${currentTeam.isFavorite ? 'fill-current' : ''}`} />
+                onClick={() => setCurrentPlayer({ ...currentPlayer, isFavorite: !currentPlayer.isFavorite })}
+                className={`transition-colors ${currentPlayer.isFavorite ? "text-yellow-400 hover:text-yellow-500" : "text-muted-foreground hover:text-yellow-400"}`}>
+                <Star className={`h-5 w-5 ${currentPlayer.isFavorite ? 'fill-current' : ''}`} />
                 <span className="sr-only">Toggle Favorite</span>
               </Button>
               <Label htmlFor="favorite-button" className="cursor-pointer text-base">Favorite</Label>
@@ -209,7 +212,7 @@ export default function TeamsPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleCreateOrUpdateTeam}>{currentTeam.id ? "Save Changes" : "Create"}</Button>
+            <Button onClick={handleCreateOrUpdatePlayer}>{currentPlayer.id ? "Save Changes" : "Create"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -220,7 +223,7 @@ export default function TeamsPage() {
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the{" "}
-              <span className="font-bold">{selectedTeam?.name}</span> team.
+              <span className="font-bold">{selectedPlayer?.name}</span> player.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

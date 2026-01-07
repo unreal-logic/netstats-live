@@ -1,0 +1,116 @@
+[
+  {
+    "id": "COMP001",
+    "name": "Summer League 2024",
+    "type": "League",
+    "format": "7-a-side",
+    "startDate": "2024-06-01",
+    "endDate": "2024-08-31",
+    "isFavorite": true,
+    "games": [
+      { "id": "GAME001" },
+      { "id": "GAME002" }
+    ]
+  },
+  {
+    "id": "COMP002",
+    "name": "Fast5 Autumn Invitational",
+    "type": "Tournament",
+    "format": "Fast5",
+    "startDate": "2024-09-15",
+    "endDate": "2024-09-15",
+    "isFavorite": false,
+    "games": [
+      { "id": "GAME003" },
+      { "id": "GAME004" },
+      { "id": "GAME005" }
+    ]
+  },
+  {
+    "id": "COMP003",
+    "name": "Winter Friendly Series",
+    "type": "Friendly",
+    "format": "6-a-side",
+    "startDate": "2024-12-01",
+    "endDate": "2024-12-22",
+    "isFavorite": false,
+    "games": [
+      { "id": "GAME006" }
+    ]
+  },
+  {
+    "id": "COMP004",
+    "name": "Regional Championship 2024",
+    "type": "Tournament",
+    "format": "7-a-side",
+    "startDate": "2024-07-20",
+    "endDate": "2024-07-21",
+    "isFavorite": true,
+    "games": [
+      { "id": "GAME007" },
+      { "id": "GAME008" }
+    ]
+  },
+  {
+    "id": "COMP005",
+    "name": "Charity Shield",
+    "type": "Friendly",
+    "format": "7-a-side",
+    "startDate": "2024-05-10",
+    "endDate": "2024-05-10",
+    "isFavorite": false,
+    "games": [
+      { "id": "GAME009" }
+    ]
+  },
+  {
+    "id": "COMP006",
+    "name": "Spring League 2024",
+    "type": "League",
+    "format": "7-a-side",
+    "startDate": "2024-03-01",
+    "endDate": "2024-05-25",
+    "isFavorite": false,
+    "games": []
+  },
+  {
+    "id": "COMP007",
+    "name": "U18 National Qualifiers",
+    "type": "Tournament",
+    "format": "7-a-side",
+    "startDate": "2024-10-05",
+    "endDate": "2024-10-06",
+    "isFavorite": true,
+    "games": []
+  },
+  {
+    "id": "COMP008",
+    "name": "Mixed Social League",
+    "type": "League",
+    "format": "6-a-side",
+    "startDate": "2024-06-10",
+    "endDate": "2024-09-30",
+    "isFavorite": false,
+    "games": []
+  },
+  {
+    "id": "COMP009",
+    "name": "Pre-season Rally",
+    "type": "Tournament",
+    "format": "Fast5",
+    "startDate": "2024-02-15",
+    "endDate": "2024-02-15",
+    "isFavorite": false,
+    "games": []
+  },
+  {
+    "id": "COMP010",
+    "name": "New Year Knockout",
+    "type": "Tournament",
+    "format": "7-a-side",
+    "startDate": "2025-01-04",
+    "endDate": "2025-01-04",
+    "isFavorite": false,
+    "games": []
+  }
+]

@@ -2,7 +2,7 @@
 
 import { ColumnDef, Row } from "@tanstack/react-table"
 import Link from "next/link"
-import { MoreHorizontal, Star, ArrowUpDown, GripVertical } from "lucide-react"
+import { MoreHorizontal, Star, GripVertical } from "lucide-react"
 import { useSortable } from "@dnd-kit/sortable"
 
 import { Badge } from "@/components/ui/badge"
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Competition } from "@/context/CompetitionContext"
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
 
 // Extend the competition type to include the functions passed from the page
 interface CompetitionsColumn extends Competition {
@@ -70,16 +71,43 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
     size: 20,
   },
   {
+    id: "favorite",
+    header: () => null,
+    cell: ({ row }) => {
+      const competition = row.original
+      return (
+        <div className='grid place-content-center'>
+          <Button
+            variant='ghost'
+            size='icon'
+            onClick={() =>
+              competition.toggleFavorite(competition.id, !competition.isFavorite)
+            }
+            className={`size-8 transition-colors ${
+              competition.isFavorite
+                ? "text-yellow-400 hover:text-yellow-500"
+                : "text-muted-foreground/50 hover:text-yellow-400"
+            }`}
+          >
+            <Star
+              className={`size-4 ${
+                competition.isFavorite ? "fill-current" : ""
+              }`}
+            />
+            <span className='sr-only'>Toggle Favorite</span>
+          </Button>
+        </div>
+      )
+    },
+    enableSorting: false,
+    enableHiding: false,
+    size: 20,
+  },
+  {
     accessorKey: "name",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <DataTableColumnHeader column={column} title="Name" />
       )
     },
     cell: ({ row }) => {
@@ -96,46 +124,10 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
     size: 120,
   },
   {
-    accessorKey: "isFavorite",
-    header: () => <div className='text-center'>Favorite</div>,
-    cell: ({ row }) => {
-      const competition = row.original
-      return (
-        <div className='text-center'>
-          <Button
-            variant='ghost'
-            size='icon'
-            onClick={() =>
-              competition.toggleFavorite(competition.id, competition.isFavorite)
-            }
-            className={`transition-colors ${
-              competition.isFavorite
-                ? "text-yellow-400 hover:text-yellow-500"
-                : "text-muted-foreground hover:text-yellow-400"
-            }`}
-          >
-            <Star className={`h-5 w-5 ${competition.isFavorite ? 'fill-current' : ''}`} />
-            <span className='sr-only'>Toggle Favorite</span>
-          </Button>
-        </div>
-      )
-    },
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
     accessorKey: "type",
     header: ({ column }) => {
       return (
-        <div className="text-center">
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Type
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
+        <DataTableColumnHeader column={column} title="Type" align="center" />
       )
     },
     cell: ({ row }) => {
@@ -143,7 +135,7 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
       return (
         <div className="text-center">
             <Badge
-              variant={competition.type === "season" ? "season" : "tournament"}
+              variant={competition.type === "League" ? "default" : "secondary"}
               className="capitalize"
             >
               {competition.type}
@@ -152,25 +144,50 @@ export const columns: ColumnDef<CompetitionsColumn>[] = [
       )
     },
   },
+    {
+        accessorKey: "format",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="Format" align="center" />
+            )
+        },
+        cell: ({ row }) => {
+            return <div className="text-center">{row.original.format}</div>
+        },
+    },
   {
     accessorKey: "games",
     header: ({ column }) => {
         return (
-          <div className="text-center">
-            <Button
-              variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Games
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
+            <DataTableColumnHeader column={column} title="Games" align="center" />
         )
     },
     cell: ({ row }) => {
       return <div className="text-center tabular-nums">{row.original.games.length}</div>
     },
   },
+    {
+        accessorKey: "startDate",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="Start Date" align="center" />
+            )
+        },
+        cell: ({ row }) => {
+            return <div className="text-center">{row.original.startDate}</div>
+        },
+    },
+    {
+        accessorKey: "endDate",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="End Date" align="center" />
+            )
+        },
+        cell: ({ row }) => {
+            return <div className="text-center">{row.original.endDate}</div>
+        },
+    },
   {
     id: "actions",
     cell: ({ row }) => {

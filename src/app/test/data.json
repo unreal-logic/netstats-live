@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "header": "Introduction to the Project",
+    "type": "Executive Summary",
+    "status": "In Progress",
+    "target": "2 weeks",
+    "limit": "5 pages",
+    "reviewer": "Eddie Lake",
+    "isFavorite": true
+  },
+  {
+    "id": 2,
+    "header": "Technical Approach and Methodology",
+    "type": "Technical Approach",
+    "status": "Done",
+    "target": "4 weeks",
+    "limit": "20 pages",
+    "reviewer": "Jamik Tashpulatov",
+    "isFavorite": true
+  },
+  {
+    "id": 3,
+    "header": "User Interface and User Experience Design",
+    "type": "Design",
+    "status": "Not Started",
+    "target": "3 weeks",
+    "limit": "10 pages",
+    "reviewer": "Assign reviewer",
+    "isFavorite": false
+  },
+  {
+    "id": 4,
+    "header": "System Capabilities and Features",
+    "type": "Capabilities",
+    "status": "In Progress",
+    "target": "5 weeks",
+    "limit": "25 pages",
+    "reviewer": "Emily Whalen",
+    "isFavorite": false
+  },
+  {
+    "id": 5,
+    "header": "Focus Documents and Supplemental Materials",
+    "type": "Focus Documents",
+    "status": "Done",
+    "target": "1 week",
+    "limit": "8 pages",
+    "reviewer": "Eddie Lake",
+    "isFavorite": false
+  },
+  {
+    "id": 6,
+    "header": "Project Narrative and Storytelling",
+    "type": "Narrative",
+    "status": "In Progress",
+    "target": "2 weeks",
+    "limit": "15 pages",
+    "reviewer": "Jamik Tashpulatov",
+    "isFavorite": false
+  },
+  {
+    "id": 7,
+    "header": "Cover Page and Branding",
+    "type": "Cover Page",
+    "status": "Not Started",
+    "target": "1 week",
+    "limit": "2 pages",
+    "reviewer": "Assign reviewer",
+    "isFavorite": false
+  },
+  {
+    "id": 8,
+    "header": "Table of Contents and Document Structure",
+    "type": "Table of Contents",
+    "status": "Done",
+    "target": "3 days",
+    "limit": "3 pages",
+    "reviewer": "Emily Whalen",
+    "isFavorite": false
+  }
+]

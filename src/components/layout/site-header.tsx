@@ -1,4 +1,4 @@
-import { ThemeToggle } from "@/components/theme-toggle"
+import { ThemeToggle } from "@/components/common/theme-toggle"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 
 export function SiteHeader() {

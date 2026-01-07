@@ -1,11 +1,33 @@
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { DataTable } from "@/components/dashboard-data-table"
-import { SectionCards } from "@/components/section-cards"
+'use client'
 
-import data from "./data.json"
+import { useState, useMemo } from "react"
+import { ChartAreaInteractive } from "@/components/dashboard/chart-area-interactive"
+import { DataTable } from "@/components/data-table/data-table"
+import { SectionCards } from "@/components/dashboard/section-cards"
+
+import initialData from "./data.json"
 import { columns } from "./columns"
 
 export default function Page() {
+  const [data, setData] = useState(() =>
+    initialData.map((item, index) => ({ ...item, isFavorite: index < 3 }))
+  )
+
+  const toggleFavorite = (id: number) => {
+    setData((currentData) =>
+      currentData.map((item) =>
+        item.id === id ? { ...item, isFavorite: !item.isFavorite } : item
+      )
+    )
+  }
+
+  const dataWithActions = useMemo(() => {
+    return data.map((item) => ({
+      ...item,
+      toggleFavorite: toggleFavorite,
+    }))
+  }, [data])
+
   return (
     <div className="flex flex-1 flex-col">
       <div className="@container/main flex flex-1 flex-col gap-2">
@@ -14,7 +36,7 @@ export default function Page() {
           <div className="px-4 lg:px-6">
             <ChartAreaInteractive />
           </div>
-          <DataTable columns={columns} data={data} />
+          <DataTable columns={columns} data={dataWithActions} />
         </div>
       </div>
     </div>
